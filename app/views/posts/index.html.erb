@@ -1,0 +1,37 @@
+<p id="notice"><%= notice %></p>
+<br>
+<h1>Posts</h1>
+<hr>
+<div class="row">
+  <% @posts.each do |post| %>
+  <div class="col-md-12">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <div class="row">
+          <div class="col-md-4 text-left panel-title"><%= post.title %></div>
+          <div class="col-md-8 text-right">
+              created at: <%= post.created_at.strftime('%m/%d/%Y at %I:%M%p') %>
+                 &nbsp <em> by  &nbsp
+                   <%= link_to post.user.username, user_posts_path(name: post.user.username) %></em>
+                <% if !post.user.avatar.url.nil? %>
+                  <%= image_tag(post.user.avatar.url, :class => "customavatar") %>
+                <% else %>
+                  <%= gravatar_tag post.user.email, :size => 30 %>
+                <% end %>
+          </div>
+        </div>
+      </div>
+      <div class="panel-body">
+        <p><%= post.blog_entry.html_safe %></p>
+      </div>
+      <div class="panel-footer">
+        <%= link_to "SHOW", post, class: "btn btn-primary" %>
+        <%= link_to "EDIT", edit_post_path(post), class: "btn btn-primary" %>
+        <%= link_to "DELETE", post, class: "btn btn-primary", method: :delete, data: { confirm: "Are you sure?" } %>
+      </div>
+    </div>
+  </div>
+  <% end %>
+</div>
+
+<%= paginate @posts %>

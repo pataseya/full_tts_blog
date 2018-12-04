@@ -1,0 +1,51 @@
+<p id="notice"><%= notice %></p>
+<br>
+<br>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <div class="row">
+          <div class="col-md-4 text-left panel-title"><%= @post.title %></div>
+          <div class="col-md-8 text-right">
+            created at: <%= @post.created_at.strftime('%m/%d/%Y at %I:%M%p') %>
+               &nbsp <em> by  &nbsp <%= @post.user.username %></em>
+              <% if !@post.user.avatar.url.nil? %>
+                <%= image_tag(@post.user.avatar.url, :class => "customavatar") %>
+              <% else %>
+                <%= gravatar_tag @post.user.email, :size => 30 %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <p><%= @post.blog_entry.html_safe %></p>
+        </div>
+        <div class="panel-footer">
+          <%= link_to "EDIT", edit_post_path(@post), class: "btn btn-primary" %>
+          <%= link_to "DELETE", @post, class: "btn btn-primary", method: :delete, data: { confirm: "Are you sure?" } %>
+        </div>
+    </div>
+  </div>
+</div>
+
+<div id="comments">
+  <%= render 'comments/form', comment: @comment %>
+</div>
+<hr>
+<h3>Here's what other's are saying ...</h3>
+<div class="well">
+  <% @post.comments.each do |comment| %>
+  	 <p>
+      <% if !comment.user.avatar.url.nil? %>
+        <%= image_tag(comment.user.avatar.url, :class => "customavatar") %>
+      <% end %>
+    <strong><%= link_to comment.user.username, user_posts_path(name: comment.user.username)%></strong> said .... <br>
+    <%= comment.comment_entry.html_safe %>
+    <hr>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to 'Back', posts_path %>
